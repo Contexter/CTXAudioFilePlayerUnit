@@ -175,9 +175,28 @@ double PrepareFileAU(MyAUGraphPlayer *player){
                                     kAudioUnitProperty_ScheduledFileRegion,
                                     kAudioUnitScope_Global, 0, &rgn, sizeof(rgn)),
                "AudioUnitSetProperty[kAudioUnitProperty_ScheduledFileRegion] failed");
+    //Tell the file player AU when to start playing; -1 means sample time means next render cycle
+    AudioTimeStamp startTime;
+    memset(&startTime,
+           0,
+           sizeof(startTime));
     
+    startTime.mFlags = kAudioTimeStampSampleTimeValid;
+    startTime.mSampleTime = -1;
     
+    CheckError(AudioUnitSetProperty(player->fileAU,
+                                    kAudioUnitProperty_ScheduleStartTimeStamp,
+                                    kAudioUnitScope_Global,
+                                    0,
+                                    &startTime,
+                                    sizeof(startTime)),
+               "AudioUnitSetProperty[kAudioUnitProperty_ScheduleStartTimeStamp]");
     
+    //file duration
+    return (nPackets * player->inputFormat.mFramesPerPacket) / player->inputFormat.mSampleRate;
+    
+    //compile - should play file and exit when file playback is complete
+    //- but doesn't compile since we're in a plugin here where I still havn't figured out where to substitute for "main"
 
 }
 
