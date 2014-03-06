@@ -137,6 +137,49 @@ void CreateMyAUGraph(MyAUGraphPlayer *player){
 }
 
 
+double PrepareFileAU(MyAUGraphPlayer *player){
+    
+    //Tell the file player unit to player the file we want to play
+    
+    CheckError(AudioUnitSetProperty(player->fileAU,
+                                    kAudioUnitProperty_ScheduledFileIDs,
+                                    kAudioUnitScope_Global,
+                                    0,
+                                    &player->inputFile,
+                                    sizeof(player->inputFile)),
+               "AudioUnitSetProperty[kAudioUnitProperty_ScheduledFileIDs] failed");
+    
+    
+    //Schedule a file region
+    
+    UInt64 nPackets;
+    UInt32 propsize = sizeof(nPackets);
+    CheckError(AudioFileGetProperty(player->inputFile,
+                                    kAudioFilePropertyAudioDataPacketCount,
+                                    &propsize, &nPackets),
+               "AudioFilePropertyAudioDataPacketCount failed");
+    
+    //tell the file player AU to play the entire file
+    ScheduledAudioFileRegion rgn;
+    memset(&rgn.mTimeStamp, 0, sizeof(rgn.mTimeStamp));
+    rgn.mTimeStamp.mFlags = kAudioTimeStampHostTimeValid;
+    rgn.mTimeStamp.mSampleTime = 0;
+    rgn.mCompletionProc = NULL;
+    rgn.mCompletionProcUserData = NULL;
+    rgn.mAudioFile = player->inputFile;
+    rgn.mLoopCount = 1;
+    rgn.mStartFrame = 0;
+    rgn.mFramesToPlay = nPackets * player->inputFormat.mFramesPerPacket;
+    
+    CheckError(AudioUnitSetProperty(player->fileAU,
+                                    kAudioUnitProperty_ScheduledFileRegion,
+                                    kAudioUnitScope_Global, 0, &rgn, sizeof(rgn)),
+               "AudioUnitSetProperty[kAudioUnitProperty_ScheduledFileRegion] failed");
+    
+    
+    
+
+}
 
 
 @end
