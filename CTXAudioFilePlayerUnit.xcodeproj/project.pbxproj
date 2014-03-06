@@ -11,6 +11,7 @@
 		8D85055718C8602B00754E67 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D85055618C8602B00754E67 /* Cocoa.framework */; };
 		8D85056118C8602B00754E67 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8D85055F18C8602B00754E67 /* InfoPlist.strings */; };
 		8D85056418C8602B00754E67 /* CTXAudioFilePlayerUnitPlugIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D85056318C8602B00754E67 /* CTXAudioFilePlayerUnitPlugIn.m */; };
+		8D85056C18C86CB100754E67 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D85056B18C86CB100754E67 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		8D85056218C8602B00754E67 /* CTXAudioFilePlayerUnitPlugIn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTXAudioFilePlayerUnitPlugIn.h; sourceTree = "<group>"; };
 		8D85056318C8602B00754E67 /* CTXAudioFilePlayerUnitPlugIn.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTXAudioFilePlayerUnitPlugIn.m; sourceTree = "<group>"; };
 		8D85056518C8602B00754E67 /* CTXAudioFilePlayerUnit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CTXAudioFilePlayerUnit-Prefix.pch"; sourceTree = "<group>"; };
+		8D85056B18C86CB100754E67 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D85056C18C86CB100754E67 /* CoreFoundation.framework in Frameworks */,
 				8D85055718C8602B00754E67 /* Cocoa.framework in Frameworks */,
 				8D85055518C8602B00754E67 /* Quartz.framework in Frameworks */,
 			);
@@ -60,6 +63,7 @@
 		8D85055318C8602B00754E67 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8D85056B18C86CB100754E67 /* CoreFoundation.framework */,
 				8D85055418C8602B00754E67 /* Quartz.framework */,
 				8D85055618C8602B00754E67 /* Cocoa.framework */,
 				8D85055818C8602B00754E67 /* Other Frameworks */,

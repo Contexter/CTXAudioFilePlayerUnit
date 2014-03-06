@@ -11,6 +11,37 @@
 
 #import "CTXAudioFilePlayerUnitPlugIn.h"
 
+
+
+#define kInputFileLocation CFSTR("/Users/benedikt/Desktop/Chormusik_0001.aiff")
+//TODO: make this define disappear and create a proper plugin path selection GUI within the QC plugin ...
+
+
+
+
+//#pragma mark main function
+//int    main(int argc, const char *argv[])
+//{
+//        // Open the input audio file
+//        // Get the audio data format from the file
+//        // Insert Listing 7.3 here
+//    
+//        // Build a basic fileplayer->speakers graph
+//        // Configure the file player
+//        // Insert Listing 7.4 here
+//    
+//        // Start playing
+//        // Sleep until the file is finished
+//        // Insert Listing 7.5 here
+//    
+//        // Cleanup
+//        // Insert Listing 7.6 here
+//}
+
+
+
+
+
 #define	kQCPlugIn_Name				@"CTXAudioFilePlayerUnit"
 #define	kQCPlugIn_Description		@"CTXAudioFilePlayerUnit description"
 
@@ -18,6 +49,8 @@
 
 // Here you need to declare the input / output properties as dynamic as Quartz Composer will handle their implementation
 //@dynamic inputFoo, outputBar;
+
+
 
 + (NSDictionary *)attributes
 {
@@ -34,7 +67,7 @@
 + (QCPlugInExecutionMode)executionMode
 {
 	// Return the execution mode of the plug-in: kQCPlugInExecutionModeProvider, kQCPlugInExecutionModeProcessor, or kQCPlugInExecutionModeConsumer.
-	return kQCPlugInExecutionModeProcessor;
+	return kQCPlugInExecutionModeProvider;
 }
 
 + (QCPlugInTimeMode)timeMode
@@ -62,6 +95,51 @@
 {
 	// Called by Quartz Composer when rendering of the composition starts: perform any required setup for the plug-in.
 	// Return NO in case of fatal failure (this will prevent rendering of the composition to start).
+    
+    
+    //work on implementing listing 7.3
+    
+    
+    
+    CFURLRef inputFileURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, kInputFileLocation, kCFURLPOSIXPathStyle, false);
+    
+    MyAUGraphPlayer player = {0};
+    CheckError(AudioFileOpenURL(inputFileURL, kAudioFileReadPermission, 0, &player.inputFile), "AudioFileOpenURL failed");
+    CFRelease(inputFileURL);
+    
+    
+    //Get the audio data format from the file
+    
+    UInt32  propSize = sizeof(player.inputFormat);
+    
+    CheckError(AudioFileGetProperty(player.inputFile, kAudioFilePropertyDataFormat, &propSize, &player.inputFormat), "Could not get file's data format");
+    
+    
+    
+    // Build a basic fileplayer->speakers graph
+    CreateMyAUGraph(&player);
+    
+    // Configure the file player
+    Float64 fileDuration = PrepareFileAU(&player);
+    
+    //Start Playing
+    CheckError(AUGraphStart(player.graph),
+               "AUGraphStart failed");
+    
+    //Sleep until the file is finished
+    usleep((int)(fileDuration * 1000.0 * 1000.0));
+    
+    //CleanUp
+    
+    AUGraphStop(player.graph);
+    AUGraphUninitialize(player.graph);
+    AUGraphClose(player.graph);
+    AudioFileClose(player.inputFile);
+    
+    
+
+    
+    
 	
 	return YES;
 }
