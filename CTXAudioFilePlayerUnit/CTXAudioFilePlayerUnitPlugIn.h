@@ -107,7 +107,10 @@ void CreateMyAUGraph(MyAUGraphPlayer *player){
     CheckError(AUGraphOpen(player->graph),
                "AuGraphOpen failed");
     
-    //Nodes act like a wrapper around audio units. If you need to work directly with a unit, you can get the unit from its containing node via AUGGraphNodeInfo(), which takes a graph and a node as its first two parameters and uses its third and fourth parameters to provide pointers  to a component description and  the audio unit (you can NULL out either of these parameters if you don't want them).
+    //Nodes act like a wrapper around audio units. If you need to work directly with a unit, you can get the unit from its containing
+    //node via AUGGraphNodeInfo(), which takes a graph and a node as its
+    //first two parameters and uses its third and fourth parameters to provide pointers
+    //to a component description and  the audio unit (you can NULL out either of these parameters if you don't want them).
     
     //Get the reference to the AudioUnit object for the
     //file player graph node
@@ -117,10 +120,19 @@ void CreateMyAUGraph(MyAUGraphPlayer *player){
     
     //Connect the output source of the file player AU to
     //the input source of the output node
+   
+
     
+    CheckError(AUGraphConnectNodeInput(player->graph,
+                                       fileNode,
+                                       0,
+                                       outputNode, 0),
+               "AUGraphConnectNodeInput");
     
+    //Now initialize the graph, causing resources to be allocated
+    CheckError(AUGraphInitialize(player->graph),
+               "AUGraphInitialize failed");
     
- 
 
 }
 
